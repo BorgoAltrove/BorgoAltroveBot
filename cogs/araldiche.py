@@ -29,9 +29,11 @@ class araldiche(commands.Cog):
 
             # Data iniziale presa dal comando
             try:
-            	start_date_raw = datetime.date.fromisoformat(data)
-            except Exception as e:
+                start_date_raw = datetime.date.fromisoformat(data)
+            except ValueError:
                 await ctx.followup.send(f"Errore nella data, il formato corretto è: YYYY-MM-DD")
+                return
+
             start_date = datetime.datetime.combine(
                 start_date_raw,
                 datetime.time.min,
