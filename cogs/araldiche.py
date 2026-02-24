@@ -14,8 +14,9 @@ class araldiche(commands.Cog):
 
     @app_commands.command(name="araldica", description="Calcola l'araldica di un utente")
     async def araldica(self, ctx: discord.Interaction, user: discord.Member, data: str):
-            
-
+        await ctx.response.defer()
+        
+        try:
             # Data finale = oggi
             today_date_raw = datetime.date.today()
             today_date = datetime.datetime.combine(
@@ -27,7 +28,10 @@ class araldiche(commands.Cog):
 
 
             # Data iniziale presa dal comando
-            start_date_raw = datetime.date.fromisoformat(data)
+            try:
+            	start_date_raw = datetime.date.fromisoformat(data)
+            except Exception as e:
+                await ctx.followup.send(f"Errore nella data, il formato corretto è: YYYY-MM-DD")
             start_date = datetime.datetime.combine(
                 start_date_raw,
                 datetime.time.min,
@@ -35,7 +39,7 @@ class araldiche(commands.Cog):
             )
             start_date = start_date - timedelta(days=1)  # Per includere il giorno stesso
 
-            categories = [1197337817924247644]
+            categories = [932644393578557560, 932645350706143292, 932648960424824962, 932646119392034916, 932649755484491836, 932651979572916304, 1096496538240434196, 1096496263819694211, 1096494403058667621, 1159167397584969889, 1096497043679223818, 1216043165744762924, 1293136475357184041, 1362788676249063545, 1098509198855258133]
             count_settimane = 0
             guild = ctx.guild
 
@@ -66,6 +70,12 @@ class araldiche(commands.Cog):
                 else:
                     end_date = end_date + timedelta(days=7)
                         
-            await ctx.channel.send(
-                f"Le settimane in cui l'utente ha scritto almeno 3 messaggi sono: {count_settimane}"
+            await ctx.followup.send(
+                f"Le settimane in cui {user} ha scritto almeno 3 messaggi sono: {count_settimane}"
             )
+        except Exception as e:
+            await ctx.followup.send(f"❌ Errore: {str(e)}")
+            print(f"Errore araldica: {e}")
+
+async def setup(bot):
+    await bot.add_cog(araldiche(bot))
