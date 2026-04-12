@@ -9,7 +9,7 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'cogs'))
 
-from buttons import acceptButton, ruleButton, refuseButton, KnucklebonesView
+from buttons import acceptButton, ruleButton, refuseButton, fulmidadoView
 
 class Knucklebones(commands.Cog):
     def __init__(self, bot):

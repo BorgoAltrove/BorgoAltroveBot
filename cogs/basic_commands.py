@@ -27,7 +27,7 @@ class basic_commands(commands.Cog):
         self.message_content = message
         await ctx.send(f"Messaggio impostato per il canale {channel.mention}: {message}")
 
-    @tasks.loop(weeks=1)
+    @tasks.loop()#(weeks=1)
     async def send_message(self):
         if self.message_channel_id and self.message_content:
             channel = self.bot.get_channel(self.message_channel_id)
