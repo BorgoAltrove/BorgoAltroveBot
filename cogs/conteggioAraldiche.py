@@ -90,7 +90,7 @@ class ConteggioAraldiche(commands.Cog):
                 araldica = "Nessuna araldica"
 
             await ctx.followup.send(
-                f"Le settimane in cui {user.nick} ha scritto almeno 3 messaggi sono: {count_settimane}, quindi l'araldica è: {araldica.name if isinstance(araldica, Araldica) else araldica}"
+                f"{user.nick} aveva {settimane_precedenti} settimane, oggi ha: {count_settimane}, quindi l'araldica è: {araldica.name if isinstance(araldica, Araldica) else araldica}"
             )
         except Exception as e:
             await ctx.followup.send(f"❌ Errore: {str(e)}")
