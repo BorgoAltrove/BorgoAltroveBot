@@ -14,8 +14,12 @@ class ConteggioAraldiche(commands.Cog):
 
     @app_commands.command(name="araldica", description="Calcola l'araldica di un utente")
     async def araldica(self, ctx: discord.Interaction, user: discord.Member, data: str, settimane_precedenti: int):
-        await ctx.response.defer()
         
+        await ctx.response.defer()
+        await ctx.followup.send("⏳ Calcolo araldica avviato... riceverai un tag quando la risposta sarà pronta")
+
+        araldica_vecchia = Araldica.from_weeks(settimane_precedenti)
+
         try:
             # Data finale = oggi
             today_date_raw = datetime.date.today()
@@ -39,7 +43,7 @@ class ConteggioAraldiche(commands.Cog):
             )
             start_date = start_date - timedelta(days=1)  # Per includere il giorno stesso
 
-            # Lista delle categorie da considerare (solo ingame)
+            # Lista delle categorie da considerare (solo chat in game)
             categories = [932644393578557560, 932645350706143292, 932648960424824962, 932646119392034916, 932649755484491836, 932651979572916304, 1096496538240434196, 1096496263819694211, 1096494403058667621, 1159167397584969889, 1096497043679223818, 1216043165744762924, 1293136475357184041, 1362788676249063545, 1098509198855258133]
             count_settimane = settimane_precedenti
             guild = ctx.guild
@@ -64,36 +68,25 @@ class ConteggioAraldiche(commands.Cog):
                                     count_messaggi +=1
                                     if count_messaggi >= 3:
                                         count_settimane += 1
+                                        print(count_settimane)
                                         break
                         if count_messaggi >= 3:
                             break
                 start_date = end_date
-                # Per controllare anche l'ultima settimana se è meno di 7 giorni
+                # Per controllare anche l'ultima settimana se è meno di 7 giorni:
                 if end_date + timedelta(days=7) > today_date and end_date.date() != today_date.date():
                     end_date = today_date
                 else:
                     end_date = end_date + timedelta(days=7)
             
-            if(count_settimane >= 102):
-                araldica = Araldica.ARCONTE_ARCONTESSA
-            elif(count_settimane >= 52):
-                araldica = Araldica.SAVIO_A
-            elif(count_settimane >= 28):
-                araldica = Araldica.LORD_LADY
-            elif(count_settimane >= 14):
-                araldica = Araldica.SIR_MISS
-            elif(count_settimane >= 6):
-                araldica = Araldica.MESSERE_DAMA
-            elif(count_settimane >= 2):
-                araldica = Araldica.CITTADINO_A
-            else:
-                araldica = "Nessuna araldica"
+            araldica_nuova = Araldica.from_weeks(count_settimane)
+            price = Araldica.calculate_price(araldica_vecchia, araldica_nuova)
 
-            await ctx.followup.send(
-                f"{user.nick} aveva {settimane_precedenti} settimane, oggi ha: {count_settimane}, quindi l'araldica è: {araldica.name if isinstance(araldica, Araldica) else araldica}"
+            await ctx.channel.send(
+                f"{ctx.user.mention} {user.nick} aveva {settimane_precedenti} settimane, oggi ha: {count_settimane} settimane, l'araldica è: {araldica_nuova.label}. Deve pagare: {price} mo."
             )
         except Exception as e:
-            await ctx.followup.send(f"❌ Errore: {str(e)}")
+            await ctx.channel.send(f"{ctx.user.mention} ❌ Errore: {str(e)}")
             print(f"Errore araldica: {e}")
 
 async def setup(bot):
