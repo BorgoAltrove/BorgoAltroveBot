@@ -11,7 +11,7 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'cogs'))
     
-from buttons import OkButton
+from cogs.old_files.buttons import OkButton
 
 from datetime import datetime
 import dateparser

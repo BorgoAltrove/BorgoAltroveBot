@@ -8,7 +8,7 @@ class basic_commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    # JOIN-ROLE
+    # JOIN-ROLE: quando un nuovo membro entra nel server
     @commands.Cog.listener()
     async def on_member_join(self, member):
         if member.guild.id != 809055669075312691:
@@ -45,7 +45,7 @@ class basic_commands(commands.Cog):
             await message.add_reaction('✅')
             await message.add_reaction('❌')
     
-    # CLEAR
+    # CLEAR: elimina i messaggi
     @app_commands.command(name="clear", description="Cancella più messaggi assieme")
     async def clear_app(self, ctx: discord.Interaction, amount: int):
         await ctx.response.defer(ephemeral=True)

@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class Araldica(Enum):
     NESSUNA = (0, 0, "Nessuna araldica")
 

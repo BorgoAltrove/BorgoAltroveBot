@@ -10,6 +10,10 @@ import dateparser
 import asyncio
 from datetime import datetime
 
+"""
+BOTTONI PER FULMINDADO E SESSIONE
+"""
+
 def check(self, m):
     return m.author == self.user and m.channel == self.dm_channel
 
